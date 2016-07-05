@@ -16,6 +16,7 @@
 package io.gravitee.policy.xslt;
 
 import io.gravitee.common.http.MediaType;
+import io.gravitee.gateway.api.ExecutionContext;
 import io.gravitee.gateway.api.Response;
 import io.gravitee.gateway.api.buffer.Buffer;
 import io.gravitee.gateway.api.http.stream.TransformableStreamBuilder;
@@ -57,19 +58,22 @@ public class XSLTTransformationPolicy {
     }
 
     @OnResponseContent
-    public ReadWriteStream onResponseContent(Response response) {
+    public ReadWriteStream onResponseContent(Response response, ExecutionContext executionContext) {
         return TransformableStreamBuilder
                 .on(response)
                 .contentType(MediaType.APPLICATION_XML)
-                .transform(toXSLT())
+                .transform(toXSLT(executionContext))
                 .build();
     }
 
-    public Function<Buffer, Buffer> toXSLT() {
+    public Function<Buffer, Buffer> toXSLT(ExecutionContext executionContext) {
         return input -> {
             try {
-                Templates template = TransformerFactory.getInstance().getTemplate(
-                        xsltTransformationPolicyConfiguration.getStylesheet());
+                // Get XSL stylesheet and transform it using internal template engine
+                String stylesheet = executionContext.getTemplateEngine()
+                        .convert(xsltTransformationPolicyConfiguration.getStylesheet());
+
+                Templates template = TransformerFactory.getInstance().getTemplate(stylesheet);
 
                 SAXParserFactory spf = SAXParserFactory.newInstance();
                 spf.setNamespaceAware(true);
