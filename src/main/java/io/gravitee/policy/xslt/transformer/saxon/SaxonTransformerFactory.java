@@ -22,7 +22,7 @@ import javax.xml.transform.TransformerConfigurationException;
 import net.sf.saxon.TransformerFactoryImpl;;
 
 /**
- * @author David BRASSELY (david at gravitee.io)
+ * @author David BRASSELY (david.brassely at graviteesource.com)
  * @author GraviteeSource Team
  */
 public class SaxonTransformerFactory extends TransformerFactoryImpl {

@@ -6,21 +6,24 @@ image:https://ci.gravitee.io/buildStatus/icon?job=gravitee-io/gravitee-policy-xs
 image:https://badges.gitter.im/Join Chat.svg["Gitter", link="https://gitter.im/gravitee-io/gravitee-io?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"]
 endif::[]
 
-== Phase
+== Scope
 
+[cols="2*", options="header"]
 |===
-|onRequest |onResponse
+^|onRequest
+^|onResponse
 
-|
-|X
+^.^| X
+^.^| X
 
 |===
 
 == Description
 
-XSLT Transformer policy lets you apply an XSL transformation if your backend is exposing XML content.
+XSLT Transformer policy lets you apply an XSL Transformation to an incoming XML request body
+or to the response body if your backend is exposing XML content.
 
-This policy is based on the well-known https://sourceforge.net/projects/saxon/[Saxon] library
+This policy is based on the well-known https://sourceforge.net/projects/saxon/[Saxon] library.
 
 [source, xml]
 .XSL to remove SOAP elements when calling a WS
@@ -70,8 +73,23 @@ You can configure the policy with the following options :
 |===
 |Property |Required |Description |Type |Default
 
-|stylesheet|X|XSLT stylesheet to apply|string|
-|parameters||Parameters to inject while running XSL transformation|Array of XSLT parameters|
+.^|scope
+^.^|X
+|The execution scope (`request` or `response`).
+^.^|string
+^.^|`RESPONSE`
+
+.^|stylesheet
+^.^|X
+|XSLT stylesheet to apply.
+^.^|string
+^.^|
+
+.^|parameters
+|
+|Parameters to inject while running XSL transformation
+^.^|Array of XSLT parameters
+^.^|-
 
 |===
 
@@ -80,6 +98,7 @@ You can configure the policy with the following options :
 .Configuration example
 ----
 "xslt": {
+    "scope": "RESPONSE",
     "stylesheet": "<xsl:stylesheet \n  version=\"2.0\"\n  xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"   xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:fn=\"http://www.w3.org/2005/xpath-functions\" exclude-result-prefixes=\"fn xsl\">\n  <xsl:output method=\"xml\" version=\"1.0\" encoding=\"UTF-8\" indent=\"yes\"/>\n\n  <!-- template to copy elements -->\n    <xsl:template match=\"*\">\n<xsl:if test=\"normalize-space(string(.)) != ''\">\n        <xsl:element name=\"{local-name()}\">\n            <xsl:apply-templates select=\"@* | node()\"/>\n        </xsl:element>\n</xsl:if>\n    </xsl:template>\n\n    <!-- template to copy attributes -->\n    <xsl:template match=\"@*\">\n        <xsl:attribute name=\"{local-name()}\">\n            <xsl:value-of select=\".\"/>\n        </xsl:attribute>\n    </xsl:template>\n\n    <!-- template to copy the rest of the nodes -->\n    <xsl:template match=\"comment() | text() | processing-instruction()\">\n        <xsl:copy/>\n    </xsl:template>\n\n  <xsl:template match=\"soapenv:*\">\n    <xsl:apply-templates select=\"@* | node()\" />\n  </xsl:template>\n\n  <xsl:template match=\"@xsi:nil[.='true']\"/>\n</xsl:stylesheet>",
     "parameters": [
         {
@@ -89,3 +108,13 @@ You can configure the policy with the following options :
     ]
 }
 ----
+
+== Http Status Code
+
+|===
+|Code |Message
+
+.^| ```500```
+| Bad stylesheet file or XSLT transformation can not be executed properly.
+
+|===

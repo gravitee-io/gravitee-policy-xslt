@@ -2,6 +2,13 @@
   "type" : "object",
   "id" : "urn:jsonschema:io:gravitee:policy:xslt:configuration:XSLTTransformationPolicyConfiguration",
   "properties" : {
+    "scope" : {
+      "title": "Scope",
+      "description": "Execute policy on <strong>request</strong> or <strong>response</strong> phase.",
+      "type" : "string",
+      "default": "REQUEST",
+      "enum" : [ "REQUEST", "RESPONSE" ]
+    },
     "stylesheet" : {
       "title": "XSLT stylesheet",
       "type" : "string",

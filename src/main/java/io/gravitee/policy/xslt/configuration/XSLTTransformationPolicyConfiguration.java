@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author David BRASSELY (david at gravitee.io)
+ * @author David BRASSELY (david.brassely at graviteesource.com)
  * @author GraviteeSource Team
  */
 public class XSLTTransformationPolicyConfiguration implements PolicyConfiguration {
@@ -29,6 +29,8 @@ public class XSLTTransformationPolicyConfiguration implements PolicyConfiguratio
     private String stylesheet;
 
     private List<XSLTParameter> parameters = new ArrayList<>();
+
+    private PolicyScope scope = PolicyScope.RESPONSE;
 
     public String getStylesheet() {
         return stylesheet;
@@ -44,5 +46,13 @@ public class XSLTTransformationPolicyConfiguration implements PolicyConfiguratio
 
     public void setParameters(List<XSLTParameter> parameters) {
         this.parameters = parameters;
+    }
+
+    public PolicyScope getScope() {
+        return scope;
+    }
+
+    public void setScope(PolicyScope scope) {
+        this.scope = scope;
     }
 }

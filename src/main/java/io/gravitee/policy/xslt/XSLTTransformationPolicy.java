@@ -17,12 +17,16 @@ package io.gravitee.policy.xslt;
 
 import io.gravitee.common.http.MediaType;
 import io.gravitee.gateway.api.ExecutionContext;
+import io.gravitee.gateway.api.Request;
 import io.gravitee.gateway.api.Response;
 import io.gravitee.gateway.api.buffer.Buffer;
-import io.gravitee.gateway.api.http.stream.TransformableStreamBuilder;
+import io.gravitee.gateway.api.http.stream.TransformableRequestStreamBuilder;
+import io.gravitee.gateway.api.http.stream.TransformableResponseStreamBuilder;
 import io.gravitee.gateway.api.stream.ReadWriteStream;
 import io.gravitee.gateway.api.stream.exception.TransformationException;
+import io.gravitee.policy.api.annotations.OnRequestContent;
 import io.gravitee.policy.api.annotations.OnResponseContent;
+import io.gravitee.policy.xslt.configuration.PolicyScope;
 import io.gravitee.policy.xslt.configuration.XSLTTransformationPolicyConfiguration;
 import io.gravitee.policy.xslt.transformer.TransformerFactory;
 import org.xml.sax.EntityResolver;
@@ -43,7 +47,7 @@ import java.io.InputStream;
 import java.util.function.Function;
 
 /**
- * @author David BRASSELY (david at gravitee.io)
+ * @author David BRASSELY (david.brassely at graviteesource.com)
  * @author GraviteeSource Team
  */
 public class XSLTTransformationPolicy {
@@ -59,11 +63,28 @@ public class XSLTTransformationPolicy {
 
     @OnResponseContent
     public ReadWriteStream onResponseContent(Response response, ExecutionContext executionContext) {
-        return TransformableStreamBuilder
-                .on(response)
-                .contentType(MediaType.APPLICATION_XML)
-                .transform(toXSLT(executionContext))
-                .build();
+        if (xsltTransformationPolicyConfiguration.getScope() == null || xsltTransformationPolicyConfiguration.getScope() == PolicyScope.RESPONSE) {
+            return TransformableResponseStreamBuilder
+                    .on(response)
+                    .contentType(MediaType.APPLICATION_XML)
+                    .transform(toXSLT(executionContext))
+                    .build();
+        }
+
+        return null;
+    }
+
+    @OnRequestContent
+    public ReadWriteStream onRequestContent(Request request, ExecutionContext executionContext) {
+        if (xsltTransformationPolicyConfiguration.getScope() == PolicyScope.REQUEST) {
+            return TransformableRequestStreamBuilder
+                    .on(request)
+                    .contentType(MediaType.APPLICATION_XML)
+                    .transform(toXSLT(executionContext))
+                    .build();
+        }
+
+        return null;
     }
 
     public Function<Buffer, Buffer> toXSLT(ExecutionContext executionContext) {
