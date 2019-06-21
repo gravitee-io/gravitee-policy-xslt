@@ -114,6 +114,11 @@ public class XSLTTransformationPolicy {
                     xsltTransformationPolicyConfiguration.getParameters().forEach(
                             parameter -> {
                                 if (parameter.getName() != null && ! parameter.getName().trim().isEmpty()) {
+                                    // Apply SpEL conversion
+                                    String extValue = (parameter.getValue() != null) ? executionContext.getTemplateEngine().getValue(parameter.getValue(), String.class) : null;
+                                    if (extValue != null) {
+                                        parameter.setValue(extValue.toString());
+                                    }
                                     transformer.setParameter(parameter.getName(), parameter.getValue());
                                 }
                             });

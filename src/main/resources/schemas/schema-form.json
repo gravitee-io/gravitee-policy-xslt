@@ -37,7 +37,7 @@
             "type" : "string"
           },
           "value" : {
-            "title": "Value",
+            "title": "Value (support EL)",
             "type" : "string"
           }
         },
