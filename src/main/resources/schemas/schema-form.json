@@ -7,7 +7,8 @@
       "description": "Execute policy on <strong>request</strong> or <strong>response</strong> phase.",
       "type" : "string",
       "default": "REQUEST",
-      "enum" : [ "REQUEST", "RESPONSE" ]
+      "enum" : [ "REQUEST", "RESPONSE" ],
+      "deprecated": "true"
     },
     "stylesheet" : {
       "title": "XSLT stylesheet",
@@ -21,7 +22,7 @@
           "allowDropFileTypes": true,
           "autoCloseTags": true,
           "mode": "xml"
-        }	
+        }
       }
     },
     "parameters" : {
