@@ -22,7 +22,8 @@
           "allowDropFileTypes": true,
           "autoCloseTags": true,
           "mode": "xml"
-        }
+        },
+        "expression-language": true
       }
     },
     "parameters" : {
@@ -39,7 +40,10 @@
           },
           "value" : {
             "title": "Value (support EL)",
-            "type" : "string"
+            "type" : "string",
+            "x-schema-form": {
+              "expression-language": true
+            }
           }
         },
         "required": [
