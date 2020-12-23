@@ -22,7 +22,7 @@
 
     <groupId>io.gravitee.policy</groupId>
     <artifactId>gravitee-policy-xslt</artifactId>
-    <version>1.6.0</version>
+    <version>1.7.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Gravitee.io APIM - Policy - XSLT Transformation</name>
     <description>Description of the XSLT Gravitee Policy</description>
