@@ -25,6 +25,10 @@ or to the response body if your backend is exposing XML content.
 
 This policy is based on the https://sourceforge.net/projects/saxon/[Saxon^] library.
 
+=== Policy identifier
+
+You can enable or disable the policy with policy identifier `xslt`.
+
 == Configuration
 
 You can configure the policy with the following options:
